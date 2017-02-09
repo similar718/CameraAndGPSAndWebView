@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">GLJAGL.COM</string>
+
+    <string name="Main_bottom">XXX高速公路有限公司研制 V1.0</string>
+    <string name="Main_top">高速公路质量安全监控系统</string>
+    <string name="Main_Camera">GPS拍照</string>
+    <string name="Main_Control">监控管理</string>
+    <string name="Main_Message">公告通知</string>
+    <string name="Main_Me">我的任务</string>
+    <string name="Main_Setting">设置</string>
 </resources>

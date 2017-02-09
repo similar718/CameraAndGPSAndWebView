@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="高速公路质量安全监控系统"
+            android:text="@string/Main_top"
             android:textSize="22sp"
             android:textColor="@color/activity_button_background_blue"
             android:id="@+id/textView" />
@@ -36,10 +36,11 @@
             android:gravity="center"
             android:layout_weight="1">
             <Button
+                android:id="@+id/main_camera_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/connect_btn_bg_selector"
-                android:text="GPS拍照"
+                android:text="@string/Main_Camera"
                 android:textColor="@drawable/connect_btn_text_color"
                 />
         </LinearLayout>
@@ -49,10 +50,11 @@
             android:gravity="center"
             android:layout_weight="1">
             <Button
+                android:id="@+id/main_control_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/connect_btn_bg_selector"
-                android:text="监控管理"
+                android:text="@string/Main_Control"
                 android:textColor="@drawable/connect_btn_text_color"
                 />
         </LinearLayout>
@@ -74,10 +76,11 @@
             android:gravity="center"
             android:layout_weight="1">
             <Button
+                android:id="@+id/main_message_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/connect_btn_bg_selector"
-                android:text="公告通知"
+                android:text="@string/Main_Message"
                 android:textColor="@drawable/connect_btn_text_color"
                 />
         </LinearLayout>
@@ -87,17 +90,48 @@
             android:gravity="center"
             android:layout_weight="1">
             <Button
+                android:id="@+id/main_me_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/connect_btn_bg_selector"
-                android:text="我的任务"
+                android:text="@string/Main_Me"
                 android:textColor="@drawable/connect_btn_text_color"
                 />
         </LinearLayout>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Main_bottom"
+            android:textColor="@color/activity_button_background_blue"
+            />
+    </LinearLayout>
 
-
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/main_setting_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/connect_btn_bg_selector"
+            android:text="@string/Main_Setting"
+            android:layout_centerVertical="true"
+            android:textColor="@drawable/connect_btn_text_color"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            />
+    </RelativeLayout>
 </LinearLayout>
