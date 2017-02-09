@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="activity_background_light_blue">#e8f0f6</color>
+    <color name="activity_button_background_blue">#007bbd</color>
+    <color name="white">#ffffffff</color>
+    <color name="connect_cancel_txt_color_selected">#008DCC</color>
+
 </resources>
