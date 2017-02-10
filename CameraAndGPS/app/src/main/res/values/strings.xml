@@ -8,4 +8,11 @@
     <string name="Main_Message">公告通知</string>
     <string name="Main_Me">我的任务</string>
     <string name="Main_Setting">设置</string>
+
+    <string name="camera_requestgps">获取GPS</string>
+    <string name="camera_get">拍照</string>
+    <string name="camera_savephoto">保存照片</string>
+    <string name="camera_back">返回首页</string>
+    <string name="camera_longitude">经度</string>
+    <string name="camera_latitude">纬度</string>
 </resources>

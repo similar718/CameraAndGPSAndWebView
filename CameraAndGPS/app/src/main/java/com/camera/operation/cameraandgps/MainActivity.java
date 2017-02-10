@@ -1,17 +1,16 @@
 package com.camera.operation.cameraandgps;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.camera.operation.cameraandgps.ui.CameraGPSActivity;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.camera.operation.cameraandgps.ui.ControlActivity;
+import com.camera.operation.cameraandgps.ui.MeActivity;
+import com.camera.operation.cameraandgps.ui.MessageActivity;
+import com.camera.operation.cameraandgps.ui.SettingActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,11 +19,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mMessageBtn;
     private Button mMeBtn;
     private Button mSettingBtn;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initView();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void initView() {
@@ -58,56 +49,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent cameraIntent = new Intent(MainActivity.this, CameraGPSActivity.class);
                 startActivity(cameraIntent);
                 break;
-        case R.id.main_control_btn://监控管理
-
+            case R.id.main_control_btn://监控管理
+                Intent controlIntent = new Intent(MainActivity.this, ControlActivity.class);
+                startActivity(controlIntent);
                 break;
-        case R.id.main_message_btn://公告通知
-
+            case R.id.main_message_btn://公告通知
+                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
+                startActivity(messageIntent);
                 break;
-        case R.id.main_me_btn://我的任务
-
+            case R.id.main_me_btn://我的任务
+                Intent meIntent = new Intent(MainActivity.this, MeActivity.class);
+                startActivity(meIntent);
                 break;
-        case R.id.main_setting_btn://设置
-
+            case R.id.main_setting_btn://设置
+                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(settingIntent);
                 break;
-        default:
-            break;
+            default:
+                break;
         }
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
     }
 }

@@ -1,6 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/camera_requestGPS_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_requestgps"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        />
+    <Button
+        android:id="@+id/camera_get_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_get"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_toRightOf="@id/camera_requestGPS_btn"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        />
+    <Button
+        android:id="@+id/camera_save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_savephoto"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_toRightOf="@id/camera_get_btn"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        />
+    <Button
+        android:id="@+id/camera_back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_back"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_toRightOf="@id/camera_save_btn"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        />
+    <Button
+        android:id="@+id/camera_longitude_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_longitude"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/camera_requestGPS_btn"
+        />
+    <Button
+        android:id="@+id/camera_latitude_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_latitude"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/camera_longitude_btn"
+        />
+
+    <TextView
+        android:id="@+id/showGPS_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        />
+
+</RelativeLayout>
