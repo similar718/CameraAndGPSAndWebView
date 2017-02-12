@@ -15,4 +15,6 @@
     <string name="camera_back">返回首页</string>
     <string name="camera_longitude">经度</string>
     <string name="camera_latitude">纬度</string>
+    <string name="camera_dialog_cancel">取消</string>
+    <string name="camera_dialog_save">保存</string>
 </resources>
