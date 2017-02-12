@@ -8,5 +8,8 @@
     <color name="activity_button_background_blue">#007bbd</color>
     <color name="white">#ffffffff</color>
     <color name="connect_cancel_txt_color_selected">#008DCC</color>
+    <color name="translusent_dialog_background">#33000000</color>
+    <color name="translusent_dialog_text_background">#66000000</color>
+    <color name="black">#000000</color>
 
 </resources>

@@ -11,4 +11,6 @@ public class Constants {
     public static String LatitudeStr = "";
     public static String LongitudeStr = "";
 
+    public static String SysFilePhotoPath = "/sdcard/cameragps";
+
 }

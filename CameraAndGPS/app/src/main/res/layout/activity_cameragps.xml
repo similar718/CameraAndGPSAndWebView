@@ -12,6 +12,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <ImageView
+        android:id="@+id/camera_back_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/play_back_btn_sel" />
+
+
     <Button
         android:id="@+id/camera_requestGPS_btn"
         android:layout_width="wrap_content"
@@ -21,6 +30,7 @@
         android:textColor="@drawable/connect_btn_text_color"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:visibility="gone"
         />
     <Button
         android:id="@+id/camera_get_btn"
@@ -30,8 +40,10 @@
         android:text="@string/camera_get"
         android:textColor="@drawable/connect_btn_text_color"
         android:layout_toRightOf="@id/camera_requestGPS_btn"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         />
     <Button
         android:id="@+id/camera_save_btn"
@@ -43,18 +55,9 @@
         android:layout_toRightOf="@id/camera_get_btn"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:visibility="gone"
         />
-    <Button
-        android:id="@+id/camera_back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/connect_btn_bg_selector"
-        android:text="@string/camera_back"
-        android:textColor="@drawable/connect_btn_text_color"
-        android:layout_toRightOf="@id/camera_save_btn"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        />
+
     <Button
         android:id="@+id/camera_longitude_btn"
         android:layout_width="wrap_content"
@@ -65,6 +68,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_below="@id/camera_requestGPS_btn"
+        android:visibility="gone"
         />
     <Button
         android:id="@+id/camera_latitude_btn"
@@ -76,6 +80,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_below="@id/camera_longitude_btn"
+        android:visibility="gone"
         />
 
     <TextView
@@ -88,5 +93,20 @@
         android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         />
+
+    <Button
+        android:id="@+id/camera_back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_btn_bg_selector"
+        android:text="@string/camera_back"
+        android:textColor="@drawable/connect_btn_text_color"
+        android:layout_marginLeft="21dp"
+        android:layout_alignBaseline="@+id/camera_get_btn"
+        android:layout_alignBottom="@+id/camera_get_btn"
+        android:layout_toRightOf="@+id/camera_get_btn"
+        android:layout_toEndOf="@+id/camera_get_btn"
+        android:visibility="gone"
+        android:layout_marginStart="21dp" />
 
 </RelativeLayout>
