@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -113,16 +114,17 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
 
         mLocationClient = new LocationClient(getApplicationContext());//声明LocationClient类
         mLocationClient.registerLocationListener(myListener);//注册监听函数
-
         mLocationClient.start();
+
+        initLocation();
     }
 
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddhhmmss");
-            String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null ? "000D" : Constants.LongitudeStr.split(".")[0] + "D" + Constants.LongitudeStr.split(".")[1];
-            String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null ? "000D" : Constants.LatitudeStr.split(".")[0] + "D" + Constants.LatitudeStr.split(".")[1];
+            String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
+            String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());
             File tempFile = new File(Constants.SysFilePhotoPath + "/" + str1 + "-" + str2 + "-" + date + ".jpg");
             try {
@@ -350,7 +352,9 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-
+            Constants.LongitudeStr = location.getLongitude()+"";
+            Constants.LatitudeStr = location.getLatitude()+"";
+            mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
             Log.i("BaiduLocationApiDem", sb.toString());
         }
 

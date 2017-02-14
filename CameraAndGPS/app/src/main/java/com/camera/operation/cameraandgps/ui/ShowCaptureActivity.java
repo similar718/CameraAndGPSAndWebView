@@ -44,7 +44,6 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
         Bundle bundle = intent.getExtras();//.getExtras()得到intent所附带的额外数据
         path = bundle.getString("path");//getString()返回指定key的值
         Bitmap bmpDefaultPic = BitmapFactory.decodeFile(path,null);
-        //mShowIv.setBitmap(bmpDefaultPic);
         mShowIv.setImage(bmpDefaultPic);
 
         mSave.setOnClickListener(this);
@@ -79,5 +78,6 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
     private void startUI(){
         Intent intent = new Intent(ShowCaptureActivity.this,CameraGPSActivity.class);
         startActivity(intent);
+        ShowCaptureActivity.this.finish();
     }
 }
