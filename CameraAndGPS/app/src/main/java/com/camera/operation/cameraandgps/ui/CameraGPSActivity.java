@@ -1,10 +1,17 @@
 package com.camera.operation.cameraandgps.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -21,12 +28,15 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.camera.operation.cameraandgps.R;
+import com.camera.operation.cameraandgps.util.BitmapUtils;
 import com.camera.operation.cameraandgps.util.Constants;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,6 +63,8 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     private Button mLatitudeBtn;
     private TextView mShowGPSTv;
     private ImageView mBackIv;
+
+    private static final int SHOW_UPDATE_LOCATION = 5001;
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
@@ -97,6 +109,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
 
         mRequestGPSBtn = (Button) findViewById(R.id.camera_requestGPS_btn);
         mGetBtn = (Button) findViewById(R.id.camera_get_btn);
+        //mGetBtn = (Button) findViewById(R.id.picture_bt);
         mSaveBtn = (Button) findViewById(R.id.camera_save_btn);
         mBackBtn = (Button) findViewById(R.id.camera_back_btn);
         mLongitudeBtn = (Button) findViewById(R.id.camera_longitude_btn);
@@ -119,6 +132,16 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         initLocation();
     }
 
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SHOW_UPDATE_LOCATION:
+                    mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
+                    break;
+            }
+        }
+    };
+
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -126,13 +149,14 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
             String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());
-            File tempFile = new File(Constants.SysFilePhotoPath + "/" + str1 + "-" + str2 + "-" + date + ".jpg");
+            String fileStr = Constants.SysFilePhotoPath + "/" + str1 + "-" + str2 + "-" + date + ".jpg";
+            File tempFile = new File(fileStr);
             try {
                 FileOutputStream fos = new FileOutputStream(tempFile);
                 fos.write(data);
                 fos.close();
                 Intent intent = new Intent(CameraGPSActivity.this, ShowCaptureActivity.class);
-                intent.putExtra("path", Constants.SysFilePhotoPath + "/" + str1 + "-" + str2 + "-" + date + ".jpg");
+                intent.putExtra("path", fileStr);
                 startActivity(intent);
                 finish();
             } catch (FileNotFoundException e) {
@@ -140,7 +164,6 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     };
 
@@ -190,6 +213,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
                 break;
             case R.id.camera_get_btn://拍照
+            //case R.id.picture_bt:
                 capture(mGetBtn);
                 break;
             case R.id.camera_save_btn://保存图片
@@ -263,6 +287,8 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+
+        mLocationClient.stop();
     }
 
     public class MyLocationListener implements BDLocationListener {
@@ -354,7 +380,11 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             }
             Constants.LongitudeStr = location.getLongitude()+"";
             Constants.LatitudeStr = location.getLatitude()+"";
-            mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
+
+            mHandler.sendEmptyMessage(SHOW_UPDATE_LOCATION);
+            //if (mShowGPSTv != null)
+                //mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + " " + "当前纬度：" + Constants.LatitudeStr);
+            //Log.i("BaiduLocationApiDem", "当前经度：" + Constants.LongitudeStr + " " + "当前纬度：" + Constants.LatitudeStr);
             Log.i("BaiduLocationApiDem", sb.toString());
         }
 

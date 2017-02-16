@@ -17,4 +17,7 @@
     <string name="camera_latitude">纬度</string>
     <string name="camera_dialog_cancel">取消</string>
     <string name="camera_dialog_save">保存</string>
+
+    <string name="setting_update">版本更新</string>
+    <string name="setting_savetolocal">网页保存到本地</string>
 </resources>

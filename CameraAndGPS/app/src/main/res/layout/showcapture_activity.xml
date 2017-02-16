@@ -9,9 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/show_back_btn"
+        android:layout_alignStart="@+id/show_back_btn">
 
         <com.camera.operation.cameraandgps.view.ZoomImageView
             android:id="@+id/show_showCapture_iv"
@@ -21,7 +22,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             ></com.camera.operation.cameraandgps.view.ZoomImageView>
+
+        <ImageView
+            android:id="@+id/show_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -80,5 +87,6 @@
                 android:textSize="18sp" />
         </RelativeLayout>
     </LinearLayout>
+
 
 </RelativeLayout>

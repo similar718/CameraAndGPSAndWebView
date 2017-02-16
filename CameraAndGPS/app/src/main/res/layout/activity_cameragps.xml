@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toRightOf="@+id/camera_requestGPS_btn"
+        android:layout_toEndOf="@+id/camera_requestGPS_btn" />
 
     <ImageView
         android:id="@+id/camera_back_iv"
@@ -45,6 +45,16 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         />
+    <Button
+        android:id="@+id/picture_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/picture_btn_sel"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"/>
+
     <Button
         android:id="@+id/camera_save_btn"
         android:layout_width="wrap_content"
@@ -91,7 +101,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         />
 
     <Button
@@ -108,5 +118,6 @@
         android:layout_toEndOf="@+id/camera_get_btn"
         android:visibility="gone"
         android:layout_marginStart="21dp" />
+
 
 </RelativeLayout>

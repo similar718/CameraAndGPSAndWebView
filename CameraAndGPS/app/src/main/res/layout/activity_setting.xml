@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_light_blue"
+    android:orientation="vertical">
+
+    <com.camera.operation.cameraandgps.view.TopbarView
+        android:id="@+id/setting_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.camera.operation.cameraandgps.view.TopbarView>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+    
+    <RelativeLayout
+        android:id="@+id/setting_update"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_update"
+            android:textColor="@color/activity_button_background_blue"
+            android:textSize="22sp"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_savetolocal"
+            android:textColor="@color/activity_button_background_blue"
+            android:textSize="22sp"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="2dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Main_Control"
+            android:textColor="@color/activity_button_background_blue"
+            android:textSize="22sp"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            />
+        <ToggleButton
+            android:id="@+id/control_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dip"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/switch_bg"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Main_Message"
+            android:textColor="@color/activity_button_background_blue"
+            android:textSize="22sp"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            />
+        <ToggleButton
+            android:id="@+id/message_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dip"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/switch_bg"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Main_Me"
+            android:textColor="@color/activity_button_background_blue"
+            android:textSize="22sp"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            />
+        <ToggleButton
+            android:id="@+id/me_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dip"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/switch_bg"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+    </RelativeLayout>
+</LinearLayout>

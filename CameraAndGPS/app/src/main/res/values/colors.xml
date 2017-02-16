@@ -11,5 +11,6 @@
     <color name="translusent_dialog_background">#33000000</color>
     <color name="translusent_dialog_text_background">#66000000</color>
     <color name="black">#000000</color>
+    <color name="red">#ff0000</color>
 
 </resources>

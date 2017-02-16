@@ -1,6 +1,8 @@
 package com.camera.operation.cameraandgps;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.camera.operation.cameraandgps.ui.ControlActivity;
 import com.camera.operation.cameraandgps.ui.MeActivity;
 import com.camera.operation.cameraandgps.ui.MessageActivity;
 import com.camera.operation.cameraandgps.ui.SettingActivity;
+import com.camera.operation.cameraandgps.util.Constants;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mMessageBtn;
     private Button mMeBtn;
     private Button mSettingBtn;
+    //private SharedPreferences sp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+        //sp = getSharedPreferences("config", Context.MODE_PRIVATE);
         mCameraBtn = (Button) findViewById(R.id.main_camera_btn);
         mControlBtn = (Button) findViewById(R.id.main_control_btn);
         mMessageBtn = (Button) findViewById(R.id.main_message_btn);
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mMessageBtn.setOnClickListener(MainActivity.this);
         mMeBtn.setOnClickListener(MainActivity.this);
         mSettingBtn.setOnClickListener(MainActivity.this);
+
+        //Constants.mControlFlag = sp.getBoolean("controlFlag",false);
+        //Constants.mMessageFlag = sp.getBoolean("messageFlag",false);
+        //Constants.mMeFlag = sp.getBoolean("meFlag",false);
     }
 
     @Override
