@@ -29,7 +29,6 @@ public class ControlActivity extends AppCompatActivity {
     private WebView wv;
     private TopbarView mTopBar;
     private ImageView mLeft;
-    //private String url ="http://shanghai.job1s.com/wap/member/index.php?c=photo";
 
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;

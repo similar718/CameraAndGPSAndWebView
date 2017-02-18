@@ -19,5 +19,8 @@
     <string name="camera_dialog_save">保存</string>
 
     <string name="setting_update">版本更新</string>
-    <string name="setting_savetolocal">网页保存到本地</string>
+    <string name="setting_savetolocal">网页设置</string>
+    <string name="setting_input_control">请输入监控管理网址</string>
+    <string name="setting_input_message">请输入公告通知网址</string>
+    <string name="setting_input_me">请输入我的任务网址</string>
 </resources>

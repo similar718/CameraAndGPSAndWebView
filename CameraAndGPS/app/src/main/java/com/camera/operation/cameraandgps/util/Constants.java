@@ -11,14 +11,14 @@ public class Constants {
     public static String LatitudeStr = "";
     public static String LongitudeStr = "";
 
-    public static String SysFilePhotoPath = "/sdcard/cameragps";
+    public static final String SysFilePhotoPath = "/sdcard/cameragps/";
+    public static String SysFilePhotoPathNeed = "/sdcard/cameragps/need/";
+    public static final String NeedPathControl = "/sdcard/cameragps/need/control.txt";
+    public static final String NeedPathMessage = "/sdcard/cameragps/need/message.txt";
+    public static final String NeedPathMe = "/sdcard/cameragps/need/me.txt";
 
-    public static final String mControlUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
-    public static final String mMessageUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
-    public static final String mMeUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
 
-    public static Boolean mControlFlag = false;
-    public static Boolean mMessageFlag = false;
-    public static Boolean mMeFlag = false;
-
+    public static  String mControlUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
+    public static  String mMessageUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
+    public static  String mMeUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
 }

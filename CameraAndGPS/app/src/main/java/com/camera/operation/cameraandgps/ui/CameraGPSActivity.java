@@ -149,7 +149,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
             String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());
-            String fileStr = Constants.SysFilePhotoPath + "/" + str1 + "-" + str2 + "-" + date + ".jpg";
+            String fileStr = Constants.SysFilePhotoPath + str1 + "-" + str2 + "-" + date + ".jpg";
             File tempFile = new File(fileStr);
             try {
                 FileOutputStream fos = new FileOutputStream(tempFile);

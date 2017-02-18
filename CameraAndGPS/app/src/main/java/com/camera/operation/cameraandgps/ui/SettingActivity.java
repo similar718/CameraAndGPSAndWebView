@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -18,21 +20,21 @@ import com.camera.operation.cameraandgps.R;
 import com.camera.operation.cameraandgps.util.Constants;
 import com.camera.operation.cameraandgps.view.TopbarView;
 
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+
 /**
  * Created by similar on 2017/2/10.
  */
 
-public class SettingActivity extends AppCompatActivity {
-    private TopbarView mTopBar;
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
+
     private ImageView mLeft;
-
+    private TextView mRight;
     private RelativeLayout mSettingUpdate;
-
-    private ToggleButton mControlTB;
-    private ToggleButton mMessageTB;
-    private ToggleButton mMeTB;
-
-    //private SharedPreferences sp = null;
+    private EditText mControlET;
+    private EditText mMessageET;
+    private EditText mMeET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,63 +44,71 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void initView(){
-        //sp = getSharedPreferences("config", Context.MODE_PRIVATE);
-
-        mTopBar = (TopbarView) findViewById(R.id.setting_tv);
-        mTopBar.setMiddleText(getResources().getString(R.string.Main_Setting));
-        mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
-        mLeft.setImageResource(R.drawable.photo_back_selector);
-
+        mLeft = (ImageView) findViewById(R.id.left_btn);
+        mRight = (TextView) findViewById(R.id.right_text);
+        mControlET = (EditText) findViewById(R.id.set_control_et);
+        mMessageET = (EditText) findViewById(R.id.set_message_et);
+        mMeET = (EditText) findViewById(R.id.set_me_et);
         mSettingUpdate = (RelativeLayout) findViewById(R.id.setting_update);
-        mControlTB = (ToggleButton) findViewById(R.id.control_switch);
-        mMessageTB = (ToggleButton) findViewById(R.id.message_switch);
-        mMeTB = (ToggleButton) findViewById(R.id.me_switch);
 
-//        Constants.mControlFlag = sp.getBoolean("controlFlag",false);
-//        Constants.mMessageFlag = sp.getBoolean("messageFlag",false);
-//        Constants.mMeFlag = sp.getBoolean("meFlag",false);
+        mLeft.setOnClickListener(this);
+        mRight.setOnClickListener(this);
+        mSettingUpdate.setOnClickListener(this);
 
-        mControlTB.setChecked(Constants.mControlFlag);
-        mMessageTB.setChecked(Constants.mMessageFlag);
-        mMeTB.setChecked(Constants.mMeFlag);
+        mControlET.setText(Constants.mControlUrl);
+        mMessageET.setText(Constants.mMessageUrl);
+        mMeET.setText(Constants.mMeUrl);
+    }
 
-        mControlTB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Constants.mControlFlag = b;
-                //sp.edit().putBoolean("controlFlag",b);
-                //sp.edit().commit();
-            }
-        });
-        mMessageTB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Constants.mMessageFlag = b;
-                //sp.edit().putBoolean("messageFlag",b);
-                //sp.edit().commit();
-            }
-        });
-        mMeTB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Constants.mMeFlag = b;
-                //sp.edit().putBoolean("meFlag",b);
-                //sp.edit().commit();
-            }
-        });
-
-        mLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.left_btn:
                 SettingActivity.this.finish();
-            }
-        });
-
-        mSettingUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.right_text:
+                if (!Constants.mControlUrl.equals(mControlET.getText().toString())){
+                    putFileToSD(mControlET.getText().toString(),"control");
+                    Constants.mControlUrl = mControlET.getText().toString();
+                }
+                if (!Constants.mMessageUrl.equals(mMessageET.getText().toString())){
+                    putFileToSD(mMessageET.getText().toString(),"message");
+                    Constants.mMessageUrl = mMessageET.getText().toString();
+                }
+                if (!Constants.mMeUrl.equals(mMeET.getText().toString())){
+                    putFileToSD(mMeET.getText().toString(),"me");
+                    Constants.mMeUrl = mMeET.getText().toString();
+                }
+                Toast.makeText(SettingActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.setting_update:
                 Toast.makeText(SettingActivity.this,"目前版本已是最新",Toast.LENGTH_SHORT).show();
-            }
-        });
+                break;
+        }
+    }
+    public void putFileToSD(String message,String name)
+    {
+        try
+        {
+            FileOutputStream outStream = new FileOutputStream(Constants.SysFilePhotoPathNeed + name + ".txt",true);
+            OutputStreamWriter writer = new OutputStreamWriter(outStream,"UTF-8");
+            writer.write(message);
+            writer.flush();
+            writer.close();//记得关闭
+            outStream.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+//        try{
+//            FileOutputStream fout =openFileOutput(Constants.SysFilePhotoPathNeed + name + ".txt", MODE_PRIVATE);
+//            byte [] bytes = message.getBytes();
+//            fout.write(bytes);
+//            fout.close();
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//        }
     }
 }

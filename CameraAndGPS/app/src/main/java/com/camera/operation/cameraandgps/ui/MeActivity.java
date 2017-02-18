@@ -29,7 +29,6 @@ public class MeActivity extends AppCompatActivity {
     private WebView wv;
     private TopbarView mTopBar;
     private ImageView mLeft;
-    //private String url ="http://shanghai.job1s.com/wap/member/index.php?c=photo";
 
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
@@ -39,9 +38,9 @@ public class MeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_control);
+        setContentView(R.layout.activity_me);
 
-        mTopBar = (TopbarView) findViewById(R.id.control_tv);
+        mTopBar = (TopbarView) findViewById(R.id.me_tv);
         mTopBar.setMiddleText(getResources().getString(R.string.Main_Me));
         mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
         mLeft.setImageResource(R.drawable.photo_back_selector);
@@ -53,11 +52,11 @@ public class MeActivity extends AppCompatActivity {
             }
         });
 
-        wv = (WebView) findViewById(R.id.control_wv);
+        wv = (WebView) findViewById(R.id.me_wv);
         //设置支持Javascript
         wv.getSettings().setJavaScriptEnabled(true);
 
-        wv.loadUrl(Constants.mControlUrl);
+        wv.loadUrl(Constants.mMeUrl);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -83,31 +82,11 @@ public class MeActivity extends AppCompatActivity {
             protected void openFileChooser(ValueCallback uploadMsg, String acceptType)
             {
                 mUploadMessage = uploadMsg;
-//                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-//                i.addCategory(Intent.CATEGORY_OPENABLE);
-//                i.setType("image/*");
-
-                //直接选择不用确认
                 Intent intent = new Intent();
-				 /* 开启Pictures画面Type设定为image */
                 intent.setType("image/*");
-				 /* 使用Intent.ACTION_GET_CONTENT这个Action */
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-
-//                //需要确认之后确定图片
-//                Intent intent;
-//                if (Build.VERSION.SDK_INT < 19) {
-//                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("image/*");
-//                } else {
-//                    intent = new Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                }
                 startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
             }
-
-
             // For Lollipop 5.0+ Devices
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams)
@@ -116,9 +95,7 @@ public class MeActivity extends AppCompatActivity {
                     uploadMessage.onReceiveValue(null);
                     uploadMessage = null;
                 }
-
                 uploadMessage = filePathCallback;
-
                 Intent intent = fileChooserParams.createIntent();
                 try
                 {
@@ -136,54 +113,24 @@ public class MeActivity extends AppCompatActivity {
             protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture)
             {
                 mUploadMessage = uploadMsg;
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                intent.setType("image/*");
-
                 //直接选择不用确认
                 Intent intent = new Intent();
 				 /* 开启Pictures画面Type设定为image */
                 intent.setType("image/*");
 				 /* 使用Intent.ACTION_GET_CONTENT这个Action */
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-
-//                //需要确认之后确定图片
-//                Intent intent;
-//                if (Build.VERSION.SDK_INT < 19) {
-//                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("image/*");
-//                } else {
-//                    intent = new Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                }
                 startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
             }
 
             protected void openFileChooser(ValueCallback<Uri> uploadMsg)
             {
                 mUploadMessage = uploadMsg;
-//                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-//                i.addCategory(Intent.CATEGORY_OPENABLE);
-//                i.setType("image/*");
-
                 //直接选择不用确认
                 Intent intent = new Intent();
 				 /* 开启Pictures画面Type设定为image */
                 intent.setType("image/*");
 				 /* 使用Intent.ACTION_GET_CONTENT这个Action */
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-
-//                //需要确认之后确定图片
-//                Intent intent;
-//                if (Build.VERSION.SDK_INT < 19) {
-//                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("image/*");
-//                } else {
-//                    intent = new Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                }
                 startActivityForResult(Intent.createChooser(intent, "File Chooser"), FILECHOOSER_RESULTCODE);
             }
         });

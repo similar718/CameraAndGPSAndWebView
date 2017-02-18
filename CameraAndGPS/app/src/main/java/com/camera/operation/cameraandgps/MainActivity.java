@@ -1,12 +1,11 @@
 package com.camera.operation.cameraandgps;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.camera.operation.cameraandgps.ui.CameraGPSActivity;
 import com.camera.operation.cameraandgps.ui.ControlActivity;
@@ -15,6 +14,11 @@ import com.camera.operation.cameraandgps.ui.MessageActivity;
 import com.camera.operation.cameraandgps.ui.SettingActivity;
 import com.camera.operation.cameraandgps.util.Constants;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mCameraBtn;
@@ -22,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mMessageBtn;
     private Button mMeBtn;
     private Button mSettingBtn;
-    //private SharedPreferences sp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        //sp = getSharedPreferences("config", Context.MODE_PRIVATE);
         mCameraBtn = (Button) findViewById(R.id.main_camera_btn);
         mControlBtn = (Button) findViewById(R.id.main_control_btn);
         mMessageBtn = (Button) findViewById(R.id.main_message_btn);
@@ -46,9 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mMeBtn.setOnClickListener(MainActivity.this);
         mSettingBtn.setOnClickListener(MainActivity.this);
 
-        //Constants.mControlFlag = sp.getBoolean("controlFlag",false);
-        //Constants.mMessageFlag = sp.getBoolean("messageFlag",false);
-        //Constants.mMeFlag = sp.getBoolean("meFlag",false);
+        Constants.mControlUrl = "".equals(readNeedFile(Constants.NeedPathControl))?Constants.mControlUrl:readNeedFile(Constants.NeedPathControl);
+        Constants.mMessageUrl = "".equals(readNeedFile(Constants.NeedPathMessage))?Constants.mMessageUrl:readNeedFile(Constants.NeedPathMessage);
+        Constants.mMeUrl = "".equals(readNeedFile(Constants.NeedPathMe))?Constants.mMeUrl:readNeedFile(Constants.NeedPathMe);
+        Toast.makeText(MainActivity.this,Constants.mControlUrl+"\n"+Constants.mMessageUrl+"\n"+Constants.mMeUrl,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -78,4 +81,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    private String readNeedFile(String filepath){
+        String str = "";
+        try {
+            File file = new File(Constants.SysFilePhotoPathNeed);
+            if (!file.exists())
+                file.mkdir();
+            File urlFile = new File(filepath);
+            if (urlFile == null)
+                return "";
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(urlFile), "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String mimeTypeLine = null ;
+            while ((mimeTypeLine = br.readLine()) != null) {
+                str = str+mimeTypeLine;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
 }
