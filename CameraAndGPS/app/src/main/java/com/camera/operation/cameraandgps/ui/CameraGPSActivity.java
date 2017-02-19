@@ -1,50 +1,42 @@
 package com.camera.operation.cameraandgps.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.camera.operation.cameraandgps.R;
-import com.camera.operation.cameraandgps.util.BitmapUtils;
 import com.camera.operation.cameraandgps.util.Constants;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by similar on 2017/2/9.
@@ -67,8 +59,9 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
 
     private static final int SHOW_UPDATE_LOCATION = 5001;
 
-    public LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyLocationListener();
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = new AMapLocationClientOption();
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -91,6 +84,145 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         File destDir = new File(Constants.SysFilePhotoPath);
         if (!destDir.exists()) {
             destDir.mkdirs();
+        }
+    }
+
+    /**
+     * 开始定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void startLocation(){
+        //根据控件的选择，重新设置定位参数
+        //resetOption();
+        getDefaultOption();
+        // 设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 启动定位
+        locationClient.startLocation();
+    }
+
+    /**
+     * 初始化定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void initLocation(){
+        //初始化client
+        locationClient = new AMapLocationClient(this.getApplicationContext());
+        //设置定位参数
+        locationClient.setLocationOption(getDefaultOption());
+        // 设置定位监听
+        locationClient.setLocationListener(locationListener);
+    }
+
+    /**
+     * 默认的定位参数
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private AMapLocationClientOption getDefaultOption(){
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        return mOption;
+    }
+
+    private static boolean mIsFlag = true;
+    private static int flag = 3;
+
+    private Thread  myth = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while (mIsFlag){
+                if (flag>2) {
+                    startLocation();
+                    flag--;
+                } else {
+                    flag--;
+                    if (flag == 1){
+                        stopLocation();
+                    }
+                    if (flag == 0){
+                        flag = 3;
+                    }
+                }
+                //程序在没有彻底的关闭之前只能用一次
+                AMapLocation location = locationClient.getLastKnownLocation();
+                if (location != null) {
+                    Constants.LatitudeStr = location.getLatitude() + "";
+                    Constants.LongitudeStr = location.getLongitude() + "";
+                }
+                mHandler.sendEmptyMessage(SHOW_UPDATE_LOCATION);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+    /**
+     * 定位监听
+     */
+    AMapLocationListener locationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation loc) {
+            if (null != loc) {
+                //解析定位结果
+                //String result = Utils.getLocationStr(loc);
+                //tvResult.setText(result);
+                Constants.LongitudeStr = loc.getLongitude()+"";
+                Constants.LatitudeStr = loc.getLatitude()+"";
+            } else {
+                //tvResult.setText("定位失败，loc is null");
+            }
+            mHandler.sendEmptyMessage(SHOW_UPDATE_LOCATION);
+        }
+    };
+
+    /**
+     * 停止定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void stopLocation(){
+        // 停止定位
+        locationClient.stopLocation();
+    }
+
+    /**
+     * 销毁定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void destroyLocation(){
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
         }
     }
 
@@ -126,10 +258,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         mLatitudeBtn.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
 
-        mLocationClient = new LocationClient(getApplicationContext());//声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);//注册监听函数
-        mLocationClient.start();
-
+        locationClient = new AMapLocationClient(this.getApplicationContext());
         initLocation();
     }
 
@@ -162,7 +291,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 Intent intent1 = new Intent(CameraGPSActivity.this, ShowCaptureActivity.class);
                 intent1.putExtra("path", fileStr);
                 startActivity(intent1);
-                finish();
+                CameraGPSActivity.this.finish();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -276,7 +405,8 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     @Override
     public void onStart() {
         super.onStart();
-
+        myth.start();
+        //startLocation();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -286,154 +416,17 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     @Override
     public void onStop() {
         super.onStop();
-
+        stopLocation();
+        mIsFlag = false;
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
-
-        mLocationClient.stop();
     }
 
-    public class MyLocationListener implements BDLocationListener {
-
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            //获取定位结果
-            StringBuffer sb = new StringBuffer(256);
-            sb.append("time : ");
-            sb.append(location.getTime());    //获取定位时间
-            sb.append("\nerror code : ");
-            sb.append(location.getLocType());    //获取类型类型
-            sb.append("\nlatitude : ");
-            sb.append(location.getLatitude());    //获取纬度信息
-
-            sb.append("\nlontitude : ");
-            sb.append(location.getLongitude());    //获取经度信息
-
-            sb.append("\nradius : ");
-            sb.append(location.getRadius());    //获取定位精准度
-
-            if (location.getLocType() == BDLocation.TypeGpsLocation) {
-
-                // GPS定位结果
-                sb.append("\nspeed : ");
-                sb.append(location.getSpeed());    // 单位：公里每小时
-
-                sb.append("\nsatellite : ");
-                sb.append(location.getSatelliteNumber());    //获取卫星数
-
-                sb.append("\nheight : ");
-                sb.append(location.getAltitude());    //获取海拔高度信息，单位米
-
-                sb.append("\ndirection : ");
-                sb.append(location.getDirection());    //获取方向信息，单位度
-
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());    //获取地址信息
-
-                sb.append("\ndescribe : ");
-                sb.append("gps定位成功");
-
-            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-
-                // 网络定位结果
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());    //获取地址信息
-
-                sb.append("\noperationers : ");
-                sb.append(location.getOperators());    //获取运营商信息
-
-                sb.append("\ndescribe : ");
-                sb.append("网络定位成功");
-
-            } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
-
-                // 离线定位结果
-                sb.append("\ndescribe : ");
-                sb.append("离线定位成功，离线定位结果也是有效的");
-
-            } else if (location.getLocType() == BDLocation.TypeServerError) {
-
-                sb.append("\ndescribe : ");
-                sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
-
-            } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-
-                sb.append("\ndescribe : ");
-                sb.append("网络不同导致定位失败，请检查网络是否通畅");
-
-            } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-
-                sb.append("\ndescribe : ");
-                sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-
-            }
-
-            sb.append("\nlocationdescribe : ");
-            sb.append(location.getLocationDescribe());    //位置语义化信息
-
-            List<Poi> list = location.getPoiList();    // POI数据
-            if (list != null) {
-                sb.append("\npoilist size = : ");
-                sb.append(list.size());
-                for (Poi p : list) {
-                    sb.append("\npoi= : ");
-                    sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
-                }
-            }
-            Constants.LongitudeStr = location.getLongitude()+"";
-            Constants.LatitudeStr = location.getLatitude()+"";
-
-            mHandler.sendEmptyMessage(SHOW_UPDATE_LOCATION);
-            //if (mShowGPSTv != null)
-                //mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + " " + "当前纬度：" + Constants.LatitudeStr);
-            //Log.i("BaiduLocationApiDem", "当前经度：" + Constants.LongitudeStr + " " + "当前纬度：" + Constants.LatitudeStr);
-            Log.i("BaiduLocationApiDem", sb.toString());
-        }
-
-        @Override
-        public void onConnectHotSpotMessage(String s, int i) {
-
-        }
-
-    }
-
-    private void initLocation() {
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-
-        option.setCoorType("bd09ll");
-        //可选，默认gcj02，设置返回的定位结果坐标系
-
-        int span = 1000;
-        option.setScanSpan(span);
-        //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-
-        option.setIsNeedAddress(true);
-        //可选，设置是否需要地址信息，默认不需要
-
-        option.setOpenGps(true);
-        //可选，默认false,设置是否使用gps
-
-        option.setLocationNotify(true);
-        //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
-
-        option.setIsNeedLocationDescribe(true);
-        //可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-
-        option.setIsNeedLocationPoiList(true);
-        //可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-
-        option.setIgnoreKillProcess(false);
-        //可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-
-        option.SetIgnoreCacheException(false);
-        //可选，默认false，设置是否收集CRASH信息，默认收集
-
-        option.setEnableSimulateGps(false);
-        //可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
-        mLocationClient.setLocOption(option);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyLocation();
     }
 }

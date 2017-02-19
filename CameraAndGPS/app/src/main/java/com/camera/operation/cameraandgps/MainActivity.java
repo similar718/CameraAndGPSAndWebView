@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Constants.mControlUrl = "".equals(readNeedFile(Constants.NeedPathControl))?Constants.mControlUrl:readNeedFile(Constants.NeedPathControl);
         Constants.mMessageUrl = "".equals(readNeedFile(Constants.NeedPathMessage))?Constants.mMessageUrl:readNeedFile(Constants.NeedPathMessage);
         Constants.mMeUrl = "".equals(readNeedFile(Constants.NeedPathMe))?Constants.mMeUrl:readNeedFile(Constants.NeedPathMe);
-        Toast.makeText(MainActivity.this,Constants.mControlUrl+"\n"+Constants.mMessageUrl+"\n"+Constants.mMeUrl,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this,Constants.mControlUrl+"\n"+Constants.mMessageUrl+"\n"+Constants.mMeUrl,Toast.LENGTH_SHORT).show();
     }
 
     @Override
