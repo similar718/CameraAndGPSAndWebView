@@ -1,15 +1,11 @@
 package com.camera.operation.cameraandgps.util;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
-import android.graphics.Rect;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +27,7 @@ public final class BitmapUtils {
         paint.setStrokeWidth(3);
         paint.setStyle(Paint.Style.STROKE);
 
-        String timeStr = "当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr;
+        String timeStr = "当前经度：" + Constants.LongitudeStr + "\n 当前纬度：" + Constants.LatitudeStr+"\n 当前时间："+Constants.getPictureTime;
         int strWidth = getStringWidth(paint, timeStr);
         int strHeight = getStringHeight(paint, timeStr);
         int startX = newb.getWidth() - strWidth;

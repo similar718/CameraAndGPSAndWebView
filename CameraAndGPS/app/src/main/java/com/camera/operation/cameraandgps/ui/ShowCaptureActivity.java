@@ -1,11 +1,19 @@
 package com.camera.operation.cameraandgps.ui;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,6 +23,12 @@ import com.camera.operation.cameraandgps.util.BitmapUtils;
 import com.camera.operation.cameraandgps.view.ZoomImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import static android.provider.MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI;
 
 /**
  * Created by similar on 2017/2/12.
@@ -71,11 +85,21 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.show_save_rl:
                 BitmapUtils.saveMyBitmap(path,bmp);
+                galleryAddPic();
                 startUI();
                 break;
             default:
                 break;
         }
+    }
+
+
+    private void galleryAddPic(){
+        File file = new File(path);
+        Uri photoUri = Uri.fromFile(file);
+        Intent mediaScanIntent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(photoUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     private void cancelSave(){

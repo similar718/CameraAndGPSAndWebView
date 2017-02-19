@@ -20,6 +20,7 @@ import com.camera.operation.cameraandgps.R;
 import com.camera.operation.cameraandgps.util.Constants;
 import com.camera.operation.cameraandgps.view.TopbarView;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
@@ -90,6 +91,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     {
         try
         {
+            File file = new File(Constants.SysFilePhotoPathNeed + name + ".txt");
+            if (file.exists()){
+                file.delete();
+            }
             FileOutputStream outStream = new FileOutputStream(Constants.SysFilePhotoPathNeed + name + ".txt",true);
             OutputStreamWriter writer = new OutputStreamWriter(outStream,"UTF-8");
             writer.write(message);
@@ -101,14 +106,5 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         {
             e.printStackTrace();
         }
-//        try{
-//            FileOutputStream fout =openFileOutput(Constants.SysFilePhotoPathNeed + name + ".txt", MODE_PRIVATE);
-//            byte [] bytes = message.getBytes();
-//            fout.write(bytes);
-//            fout.close();
-//        }
-//        catch(Exception e){
-//            e.printStackTrace();
-//        }
     }
 }

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -136,7 +137,9 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_UPDATE_LOCATION:
-                    mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddHHmmss");
+                    String date = sDateFormat.format(new Date());
+                    mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr+ "\n" + "当前时间：" + date);
                     break;
             }
         }
@@ -145,19 +148,20 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddhhmmss");
-            String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
-            String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddHHmmss");
+            String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null || "4.9E-324".equals(Constants.LongitudeStr) ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
+            String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null || "4.9E-324".equals(Constants.LatitudeStr) ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());
+            Constants.getPictureTime = date;
             String fileStr = Constants.SysFilePhotoPath + str1 + "-" + str2 + "-" + date + ".jpg";
             File tempFile = new File(fileStr);
             try {
                 FileOutputStream fos = new FileOutputStream(tempFile);
                 fos.write(data);
                 fos.close();
-                Intent intent = new Intent(CameraGPSActivity.this, ShowCaptureActivity.class);
-                intent.putExtra("path", fileStr);
-                startActivity(intent);
+                Intent intent1 = new Intent(CameraGPSActivity.this, ShowCaptureActivity.class);
+                intent1.putExtra("path", fileStr);
+                startActivity(intent1);
                 finish();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -240,7 +244,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     public void capture(View view) {
         Camera.Parameters parameters = m_camera.getParameters();
         parameters.setPictureFormat(ImageFormat.JPEG);
-        parameters.setPictureSize(Constants.WIDTH, Constants.HEIGHT);
+        //parameters.setPictureSize(Constants.WIDTH, Constants.HEIGHT);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//自动对焦
         m_camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
