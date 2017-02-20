@@ -122,9 +122,6 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
 
     /**
      * 默认的定位参数
-     * @since 2.8.0
-     * @author hongming.wang
-     *
      */
     private AMapLocationClientOption getDefaultOption(){
         AMapLocationClientOption mOption = new AMapLocationClientOption();
@@ -145,9 +142,11 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     private static boolean mIsFlag = true;
     private static int flag = 3;
 
-    private Thread  myth = new Thread(new Runnable() {
+
+    public class MyThread extends Thread{
         @Override
         public void run() {
+            super.run();
             while (mIsFlag){
                 if (flag>2) {
                     startLocation();
@@ -161,12 +160,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                         flag = 3;
                     }
                 }
-                //程序在没有彻底的关闭之前只能用一次
-                AMapLocation location = locationClient.getLastKnownLocation();
-                if (location != null) {
-                    Constants.LatitudeStr = location.getLatitude() + "";
-                    Constants.LongitudeStr = location.getLongitude() + "";
-                }
+                startLocation();
                 mHandler.sendEmptyMessage(SHOW_UPDATE_LOCATION);
                 try {
                     Thread.sleep(1000);
@@ -175,7 +169,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 }
             }
         }
-    });
+    }
     /**
      * 定位监听
      */
@@ -258,7 +252,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         mLatitudeBtn.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
 
-        locationClient = new AMapLocationClient(this.getApplicationContext());
+        //locationClient = new AMapLocationClient(this.getApplicationContext());
         initLocation();
     }
 
@@ -311,6 +305,8 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             m_camera.setDisplayOrientation(0);
             m_camera.setParameters(parameters);
             m_camera.startPreview();
+
+            mIsFlag = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -402,10 +398,11 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 .build();
     }
 
+    Thread thread = new MyThread();
     @Override
     public void onStart() {
         super.onStart();
-        myth.start();
+        //thread.start();
         //startLocation();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -414,10 +411,24 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+        mIsFlag = true;
+        thread.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         stopLocation();
         mIsFlag = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+//        stopLocation();
+//        mIsFlag = false;
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
