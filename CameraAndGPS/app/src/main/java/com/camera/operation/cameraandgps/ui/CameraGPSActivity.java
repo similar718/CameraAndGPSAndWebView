@@ -260,7 +260,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_UPDATE_LOCATION:
-                    SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddHHmmss");
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String date = sDateFormat.format(new Date());
                     mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr+ "\n" + "当前时间：" + date);
                     break;
@@ -275,7 +275,8 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null || "4.9E-324".equals(Constants.LongitudeStr) ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
             String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null || "4.9E-324".equals(Constants.LatitudeStr) ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());
-            Constants.getPictureTime = date;
+            SimpleDateFormat dates = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Constants.getPictureTime = dates.format(new Date());
             String fileStr = Constants.SysFilePhotoPath + str1 + "-" + str2 + "-" + date + ".jpg";
             File tempFile = new File(fileStr);
             try {
@@ -284,6 +285,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 fos.close();
                 Intent intent1 = new Intent(CameraGPSActivity.this, ShowCaptureActivity.class);
                 intent1.putExtra("path", fileStr);
+                //intent1.putExtra("data",data);
                 startActivity(intent1);
                 CameraGPSActivity.this.finish();
             } catch (FileNotFoundException e) {
@@ -301,6 +303,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
             Camera.Parameters parameters = m_camera.getParameters();
             //设置预览尺寸
             parameters.setPreviewSize(Constants.WIDTH, Constants.HEIGHT);
+            parameters.setPictureSize(Constants.PWIDTH,Constants.PHEIGHT);
             parameters.setPreviewFormat(ImageFormat.NV21);
             m_camera.setDisplayOrientation(0);
             m_camera.setParameters(parameters);
