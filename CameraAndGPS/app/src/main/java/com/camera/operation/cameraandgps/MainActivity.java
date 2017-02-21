@@ -1,9 +1,13 @@
 package com.camera.operation.cameraandgps;
 
 import android.content.Intent;
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mMessageBtn;
     private Button mMeBtn;
     private Button mSettingBtn;
+
+    private int width = 0;
+    private int height = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +57,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mMeBtn.setOnClickListener(MainActivity.this);
         mSettingBtn.setOnClickListener(MainActivity.this);
 
+        requestCameraPictureSize();
+        requestFileToTest();
+        //Toast.makeText(MainActivity.this,Constants.PWIDTH+"\n"+Constants.PHEIGHT,Toast.LENGTH_SHORT).show();
+    }
+
+    private void requestFileToTest(){
         Constants.mControlUrl = "".equals(readNeedFile(Constants.NeedPathControl))?Constants.mControlUrl:readNeedFile(Constants.NeedPathControl);
         Constants.mMessageUrl = "".equals(readNeedFile(Constants.NeedPathMessage))?Constants.mMessageUrl:readNeedFile(Constants.NeedPathMessage);
         Constants.mMeUrl = "".equals(readNeedFile(Constants.NeedPathMe))?Constants.mMeUrl:readNeedFile(Constants.NeedPathMe);
-        //Toast.makeText(MainActivity.this,Constants.mControlUrl+"\n"+Constants.mMessageUrl+"\n"+Constants.mMeUrl,Toast.LENGTH_SHORT).show();
+    }
+
+    private void requestCameraPictureSize(){
+        Camera camera = Camera.open();
+        Camera.Parameters parameters = camera.getParameters();
+        List<Camera.Size> listpicture = parameters.getSupportedPictureSizes();
+        if (listpicture.size() > 1) {
+            Iterator<Camera.Size> itor = listpicture.iterator();
+            Camera.Size cur = null;
+            while (itor.hasNext()) {
+                cur = itor.next();
+                //Log.i("jw", "listpicture==" + cur.width + " " + cur.height);
+                if (cur.width>width || cur.height>height){
+                    width = cur.width;
+                    height = cur.height;
+                }
+            }
+        }
+        camera.release();
+        camera = null;
+        Constants.PWIDTH = width;
+        Constants.PHEIGHT = height;
     }
 
     @Override

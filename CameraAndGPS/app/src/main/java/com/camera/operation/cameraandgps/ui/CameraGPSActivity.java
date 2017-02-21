@@ -37,6 +37,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by similar on 2017/2/9.
@@ -296,7 +298,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         }
     };
 
-    private void initCameara() {
+    private void initCamera() {
         try {
             m_camera = Camera.open();// 0 表示后摄像头  1表示前摄像头  默认为后摄像头
             m_camera.setPreviewDisplay(m_surfaceHolder);
@@ -330,7 +332,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
 
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
-        initCameara();
+        initCamera();
     }
 
     @Override
@@ -372,8 +374,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     public void capture(View view) {
         Camera.Parameters parameters = m_camera.getParameters();
         parameters.setPictureFormat(ImageFormat.JPEG);
-        //parameters.setPictureSize(Constants.WIDTH, Constants.HEIGHT);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//自动对焦
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);//自动对焦
         m_camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {

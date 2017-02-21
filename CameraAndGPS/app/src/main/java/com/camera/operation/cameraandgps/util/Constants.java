@@ -8,8 +8,8 @@ public class Constants {
     public static final int WIDTH = 1280;//define Show Image height
     public static final int HEIGHT = 720;//define show Image width
 
-    public static final int PWIDTH = 4160;//define Show Image height
-    public static final int PHEIGHT = 3120;//define show Image width
+    public static int PWIDTH = 4160;//define Show Image height
+    public static int PHEIGHT = 3120;//define show Image width
 
     public static String LatitudeStr = "";
     public static String LongitudeStr = "";
