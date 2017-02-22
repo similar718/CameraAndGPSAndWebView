@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
+import android.graphics.Typeface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,12 +23,16 @@ public final class BitmapUtils {
         Canvas canvas = new Canvas(newb);
         canvas.drawBitmap(src, 0, 0, new Paint());
         Paint paint = new Paint();
-        paint.setTextSize(36);
+        paint.setTextSize(48);
+        String familyName = "宋体";
+        Typeface font = Typeface.create(familyName,Typeface.NORMAL);
+        paint.setTypeface(font);
         paint.setColor(Color.RED);
         paint.setStrokeWidth(3);
         paint.setStyle(Paint.Style.STROKE);
 
-        String timeStr = "当前经度：" + Constants.LongitudeStr + "\n 当前纬度：" + Constants.LatitudeStr+"\n 当前时间："+Constants.getPictureTime;
+
+        String timeStr = "经度：" + Constants.LongitudeStr + "\n 纬度：" + Constants.LatitudeStr+"\n 时间："+Constants.getPictureTime;
         int strWidth = getStringWidth(paint, timeStr);
         int strHeight = getStringHeight(paint, timeStr);
         int startX = newb.getWidth() - strWidth;

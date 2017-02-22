@@ -2,6 +2,7 @@ package com.camera.operation.cameraandgps.ui;
 
 import android.content.Intent;
 import android.graphics.ImageFormat;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -254,6 +255,10 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         mLatitudeBtn.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
 
+        String familyName = "宋体";
+        Typeface font = Typeface.create(familyName,Typeface.NORMAL);
+        mShowGPSTv.setTypeface(font);
+
         //locationClient = new AMapLocationClient(this.getApplicationContext());
         initLocation();
     }
@@ -264,7 +269,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
                 case SHOW_UPDATE_LOCATION:
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String date = sDateFormat.format(new Date());
-                    mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr+ "\n" + "当前时间：" + date);
+                    mShowGPSTv.setText("经度：" + Constants.LongitudeStr + "\n" + "纬度：" + Constants.LatitudeStr+ "\n" + "时间：" + date);
                     break;
             }
         }
@@ -299,6 +304,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     };
 
     private void initCamera() {
+        requestCameraPictureSize();
         try {
             m_camera = Camera.open();// 0 表示后摄像头  1表示前摄像头  默认为后摄像头
             m_camera.setPreviewDisplay(m_surfaceHolder);
@@ -315,6 +321,32 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    private int width = 0;
+    private int height = 0;
+    private void requestCameraPictureSize(){
+        Camera camera = Camera.open();
+        Camera.Parameters parameters = camera.getParameters();
+        List<Camera.Size> listpicture = parameters.getSupportedPictureSizes();
+        if (listpicture.size() > 1) {
+            Iterator<Camera.Size> itor = listpicture.iterator();
+            Camera.Size cur = null;
+            while (itor.hasNext()) {
+                cur = itor.next();
+                //if (cur.width<3000) {
+                    if (cur.width > width || cur.height > height) {
+                        width = cur.width;
+                        height = cur.height;
+                    }
+                //}
+            }
+        }
+        camera.release();
+        camera = null;
+        Constants.PWIDTH = width;
+        Constants.PHEIGHT = height;
     }
 
     private void destroyCamera() {
@@ -344,7 +376,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.camera_requestGPS_btn://获取GPS
-                mShowGPSTv.setText("当前经度：" + Constants.LongitudeStr + "\n" + "当前纬度：" + Constants.LatitudeStr);
+                mShowGPSTv.setText("经度：" + Constants.LongitudeStr + "\n" + "纬度：" + Constants.LatitudeStr);
                 break;
             case R.id.camera_get_btn://拍照
             //case R.id.picture_bt:

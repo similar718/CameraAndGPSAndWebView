@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mMeBtn;
     private Button mSettingBtn;
 
-    private int width = 0;
-    private int height = 0;
+//    private int width = 0;
+//    private int height = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mMeBtn.setOnClickListener(MainActivity.this);
         mSettingBtn.setOnClickListener(MainActivity.this);
 
-        requestCameraPictureSize();
+        //requestCameraPictureSize();
         requestFileToTest();
-        //Toast.makeText(MainActivity.this,Constants.PWIDTH+"\n"+Constants.PHEIGHT,Toast.LENGTH_SHORT).show();
     }
 
     private void requestFileToTest(){
@@ -67,33 +66,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Constants.mMessageUrl = "".equals(readNeedFile(Constants.NeedPathMessage))?Constants.mMessageUrl:readNeedFile(Constants.NeedPathMessage);
         Constants.mMeUrl = "".equals(readNeedFile(Constants.NeedPathMe))?Constants.mMeUrl:readNeedFile(Constants.NeedPathMe);
     }
-
-    private void requestCameraPictureSize(){
-        Camera camera = Camera.open();
-        Camera.Parameters parameters = camera.getParameters();
-        List<Camera.Size> listpicture = parameters.getSupportedPictureSizes();
-        if (listpicture.size() > 1) {
-            Iterator<Camera.Size> itor = listpicture.iterator();
-            Camera.Size cur = null;
-            while (itor.hasNext()) {
-                cur = itor.next();
-                //Log.i("jw", "listpicture==" + cur.width + " " + cur.height);
-                if (cur.width>width || cur.height>height){
-                    width = cur.width;
-                    height = cur.height;
-                }
-            }
-        }
-        camera.release();
-        camera = null;
-        Constants.PWIDTH = width;
-        Constants.PHEIGHT = height;
-    }
+//
+//    private void requestCameraPictureSize(){
+//        Camera camera = Camera.open();
+//        Camera.Parameters parameters = camera.getParameters();
+//        List<Camera.Size> listpicture = parameters.getSupportedPictureSizes();
+//        if (listpicture.size() > 1) {
+//            Iterator<Camera.Size> itor = listpicture.iterator();
+//            Camera.Size cur = null;
+//            while (itor.hasNext()) {
+//                cur = itor.next();
+//                if (cur.width<3000) {
+//                    if (cur.width > width || cur.height > height) {
+//                        width = cur.width;
+//                        height = cur.height;
+//                    }
+//                }
+//            }
+//        }
+//        camera.release();
+//        camera = null;
+//        Constants.PWIDTH = width;
+//        Constants.PHEIGHT = height;
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.main_camera_btn://GPS拍照
+                //requestCameraPictureSize();
                 Intent cameraIntent = new Intent(MainActivity.this, CameraGPSActivity.class);
                 startActivity(cameraIntent);
                 break;
