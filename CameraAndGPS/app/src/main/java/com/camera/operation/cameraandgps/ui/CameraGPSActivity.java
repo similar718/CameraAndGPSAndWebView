@@ -278,7 +278,7 @@ public class CameraGPSActivity extends AppCompatActivity implements SurfaceHolde
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            SimpleDateFormat sDateFormat = new SimpleDateFormat("MMddHHmmss");
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
             String str1 = ("").equals(Constants.LongitudeStr) || Constants.LongitudeStr == null || "4.9E-324".equals(Constants.LongitudeStr) ? "000D" : Constants.LongitudeStr.split("\\.")[0] + "D" + Constants.LongitudeStr.split("\\.")[1];
             String str2 = ("").equals(Constants.LatitudeStr) || Constants.LatitudeStr == null || "4.9E-324".equals(Constants.LatitudeStr) ? "000D" : Constants.LatitudeStr.split("\\.")[0] + "D" + Constants.LatitudeStr.split("\\.")[1];
             String date = sDateFormat.format(new Date());

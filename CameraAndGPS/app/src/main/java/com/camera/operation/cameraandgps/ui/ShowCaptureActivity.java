@@ -70,7 +70,6 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
         mSave.setOnClickListener(this);
         mCancel.setOnClickListener(this);
         mBack.setOnClickListener(this);
-
         mShow.setImageBitmap(bmp);
     }
 

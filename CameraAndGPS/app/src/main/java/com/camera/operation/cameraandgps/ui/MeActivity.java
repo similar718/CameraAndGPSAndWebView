@@ -14,6 +14,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.camera.operation.cameraandgps.R;
@@ -29,6 +30,7 @@ public class MeActivity extends AppCompatActivity {
     private WebView wv;
     private TopbarView mTopBar;
     private ImageView mLeft;
+    private TextView mMainBack;
 
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
@@ -44,6 +46,14 @@ public class MeActivity extends AppCompatActivity {
         mTopBar.setMiddleText(getResources().getString(R.string.Main_Me));
         mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
         mLeft.setImageResource(R.drawable.photo_back_selector);
+        mMainBack = (TextView) mTopBar.findViewById(R.id.right_tv);
+        mMainBack.setText(getResources().getString(R.string.web_back));
+        mMainBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wv.goBack();
+            }
+        });
 
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
