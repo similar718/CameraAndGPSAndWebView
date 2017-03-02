@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -47,19 +48,23 @@ public class MessageActivity extends AppCompatActivity {
         mTopBar.setMiddleText(getResources().getString(R.string.Main_Message));
         mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
         mLeft.setImageResource(R.drawable.photo_back_selector);
-        mMainBack = (TextView) mTopBar.findViewById(R.id.right_tv);
-        mMainBack.setText(getResources().getString(R.string.web_back));
-        mMainBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wv.goBack();
-            }
-        });
+//        mMainBack = (TextView) mTopBar.findViewById(R.id.right_tv);
+//        mMainBack.setText(getResources().getString(R.string.web_back));
+//        mMainBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                wv.goBack();
+//            }
+//        });
 
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageActivity.this.finish();
+                if (wv.canGoBack()){
+                    wv.goBack();
+                } else {
+                    MessageActivity.this.finish();
+                }
             }
         });
 
@@ -177,5 +182,15 @@ public class MessageActivity extends AppCompatActivity {
         }
         else
             Toast.makeText(getBaseContext(), "Failed to Upload Image", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()){
+            wv.goBack();
+            return true;
+        }
+        this.finish();
+        return false;
     }
 }
