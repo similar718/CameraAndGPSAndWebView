@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,6 +48,10 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
     private String path = null;
     private Bitmap bmp = null;
 
+    private final static int MSG_UPDATE_TEXT = 500;
+    private final static int MSG_GET_IMAGE_SHOW = 501;
+    private final static int MSG_GET_IMAGE_INFO = 502;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +75,30 @@ public class ShowCaptureActivity extends AppCompatActivity implements View.OnCli
 
         mSave.setOnClickListener(this);
         mCancel.setOnClickListener(this);
+        mCancel.setVisibility(View.GONE);
+        mSave.setVisibility(View.GONE);
         mBack.setOnClickListener(this);
         mShow.setImageBitmap(bmp);
+        myhandler.sendEmptyMessage(MSG_UPDATE_TEXT);
     }
+
+    private Handler myhandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_UPDATE_TEXT:
+                    BitmapUtils.saveMyBitmap(path,bmp);
+                    galleryAddPic();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.show_back_btn:
-                cancelSave();
+                startUI();
                 break;
             case  R.id.show_cancel_rl:
                 cancelSave();
