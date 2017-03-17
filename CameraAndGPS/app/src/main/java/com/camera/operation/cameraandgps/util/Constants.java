@@ -21,9 +21,9 @@ public class Constants {
     public static final String NeedPathMe = "/sdcard/cameragps/need/me.txt";
 
 
-    public static  String mControlUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
-    public static  String mMessageUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
-    public static  String mMeUrl = "http://180.140.191.252:8078/zlgl/jljktpsc.aspx";
+    public static  String mControlUrl = "http://221.7.215.58:8078/zlgl/zalogin.aspx";
+    public static  String mMessageUrl = "http://221.7.215.58:8078/zlgl/zalogin.aspx";
+    public static  String mMeUrl = "http://221.7.215.58:8078/zlgl/zalogin.aspx";
 
     public static String getPictureTime = "";
 }
