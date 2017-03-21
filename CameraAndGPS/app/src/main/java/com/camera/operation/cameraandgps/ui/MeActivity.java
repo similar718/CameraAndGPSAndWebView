@@ -2,6 +2,7 @@ package com.camera.operation.cameraandgps.ui;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,8 +11,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.GeolocationPermissions;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -31,7 +34,6 @@ public class MeActivity extends AppCompatActivity {
     private WebView wv;
     private TopbarView mTopBar;
     private ImageView mLeft;
-    private TextView mMainBack;
 
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
@@ -47,15 +49,6 @@ public class MeActivity extends AppCompatActivity {
         mTopBar.setMiddleText(getResources().getString(R.string.Main_Me));
         mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
         mLeft.setImageResource(R.drawable.photo_back_selector);
-//        mMainBack = (TextView) mTopBar.findViewById(R.id.right_tv);
-//        mMainBack.setText(getResources().getString(R.string.web_back));
-//        mMainBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                wv.goBack();
-//            }
-//        });
-
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +61,20 @@ public class MeActivity extends AppCompatActivity {
         });
 
         wv = (WebView) findViewById(R.id.me_wv);
+
+        WebSettings webSettings = wv.getSettings();
         //设置支持Javascript
-        wv.getSettings().setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
+
+
+        //启用数据库
+        webSettings.setDatabaseEnabled(true);
+        String dir = this.getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
+
+        //启用地理定位
+        webSettings.setGeolocationEnabled(true);
+        //设置定位的数据库路径
+        webSettings.setGeolocationDatabasePath(dir);
 
         wv.loadUrl(Constants.mMeUrl);
         wv.setWebViewClient(new WebViewClient() {
@@ -89,6 +94,14 @@ public class MeActivity extends AppCompatActivity {
             }
         });
 
+        webSettings.setDomStorageEnabled(true);
+        wv.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+            }
+        });
 
         wv.setWebChromeClient(new WebChromeClient(){
 
