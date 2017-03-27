@@ -11,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.GeolocationPermissions;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -32,7 +34,6 @@ public class MessageActivity extends AppCompatActivity {
     private WebView wv;
     private TopbarView mTopBar;
     private ImageView mLeft;
-    private TextView mMainBack;
 
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
@@ -48,14 +49,6 @@ public class MessageActivity extends AppCompatActivity {
         mTopBar.setMiddleText(getResources().getString(R.string.Main_Message));
         mLeft = (ImageView) mTopBar.findViewById(R.id.left_btn);
         mLeft.setImageResource(R.drawable.photo_back_selector);
-//        mMainBack = (TextView) mTopBar.findViewById(R.id.right_tv);
-//        mMainBack.setText(getResources().getString(R.string.web_back));
-//        mMainBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                wv.goBack();
-//            }
-//        });
 
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +62,13 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         wv = (WebView) findViewById(R.id.message_wv);
+
+        WebSettings webSettings = wv.getSettings();
         //设置支持Javascript
-        wv.getSettings().setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
+
+        wv.getSettings().setGeolocationEnabled(true);
+        wv.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
         wv.loadUrl(Constants.mMessageUrl);
         wv.setWebViewClient(new WebViewClient() {
@@ -90,8 +88,16 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
+        webSettings.setDomStorageEnabled(true);
+        //启用地理定位
+        webSettings.setGeolocationEnabled(true);
         wv.setWebChromeClient(new WebChromeClient(){
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+            }
 
             // For 3.0+ Devices (Start)
             // onActivityResult attached before constructor

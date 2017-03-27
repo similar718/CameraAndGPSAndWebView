@@ -25,10 +25,6 @@ import com.camera.operation.cameraandgps.R;
 import com.camera.operation.cameraandgps.util.Constants;
 import com.camera.operation.cameraandgps.view.TopbarView;
 
-/**
- * Created by similar on 2017/2/17.
- */
-
 public class MeActivity extends AppCompatActivity {
 
     private WebView wv;
@@ -52,7 +48,7 @@ public class MeActivity extends AppCompatActivity {
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (wv.canGoBack()){
+                if (wv.canGoBack()) {
                     wv.goBack();
                 } else {
                     MeActivity.this.finish();
@@ -61,20 +57,14 @@ public class MeActivity extends AppCompatActivity {
         });
 
         wv = (WebView) findViewById(R.id.me_wv);
+        wv.setWebViewClient(new WebViewClient());
 
         WebSettings webSettings = wv.getSettings();
         //设置支持Javascript
         webSettings.setJavaScriptEnabled(true);
 
-
-        //启用数据库
-        webSettings.setDatabaseEnabled(true);
-        String dir = this.getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
-
-        //启用地理定位
-        webSettings.setGeolocationEnabled(true);
-        //设置定位的数据库路径
-        webSettings.setGeolocationDatabasePath(dir);
+        wv.getSettings().setGeolocationEnabled(true);
+        wv.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
         wv.loadUrl(Constants.mMeUrl);
         wv.setWebViewClient(new WebViewClient() {
@@ -95,41 +85,34 @@ public class MeActivity extends AppCompatActivity {
         });
 
         webSettings.setDomStorageEnabled(true);
-        wv.setWebChromeClient(new WebChromeClient(){
+        //启用地理定位
+        webSettings.setGeolocationEnabled(true);
+        wv.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
             }
-        });
 
-        wv.setWebChromeClient(new WebChromeClient(){
-
-            // For 3.0+ Devices (Start)
-            // onActivityResult attached before constructor
-            protected void openFileChooser(ValueCallback uploadMsg, String acceptType)
-            {
+            protected void openFileChooser(ValueCallback uploadMsg, String acceptType) {
                 mUploadMessage = uploadMsg;
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
             }
-            // For Lollipop 5.0+ Devices
+
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams)
-            {
+            public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                 if (uploadMessage != null) {
                     uploadMessage.onReceiveValue(null);
                     uploadMessage = null;
                 }
                 uploadMessage = filePathCallback;
                 Intent intent = fileChooserParams.createIntent();
-                try
-                {
+                try {
                     startActivityForResult(intent, REQUEST_SELECT_FILE);
-                } catch (ActivityNotFoundException e)
-                {
+                } catch (ActivityNotFoundException e) {
                     uploadMessage = null;
                     Toast.makeText(getBaseContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
                     return false;
@@ -138,8 +121,7 @@ public class MeActivity extends AppCompatActivity {
             }
 
             //For Android 4.1 only
-            protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture)
-            {
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 mUploadMessage = uploadMsg;
                 //直接选择不用确认
                 Intent intent = new Intent();
@@ -150,8 +132,7 @@ public class MeActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
             }
 
-            protected void openFileChooser(ValueCallback<Uri> uploadMsg)
-            {
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg) {
                 mUploadMessage = uploadMsg;
                 //直接选择不用确认
                 Intent intent = new Intent();
@@ -163,6 +144,7 @@ public class MeActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {

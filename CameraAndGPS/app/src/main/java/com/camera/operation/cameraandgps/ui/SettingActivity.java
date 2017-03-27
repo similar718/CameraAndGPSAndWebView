@@ -17,7 +17,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.camera.operation.cameraandgps.R;
+import com.camera.operation.cameraandgps.base.LocalEntity;
 import com.camera.operation.cameraandgps.util.Constants;
+import com.camera.operation.cameraandgps.util.DbHelper;
 import com.camera.operation.cameraandgps.view.TopbarView;
 
 import java.io.File;
@@ -36,6 +38,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mControlET;
     private EditText mMessageET;
     private EditText mMeET;
+    private DbHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView(){
+        mHelper = new DbHelper(this);
+
         mLeft = (ImageView) findViewById(R.id.left_btn);
         mRight = (TextView) findViewById(R.id.right_text);
         mControlET = (EditText) findViewById(R.id.set_control_et);
@@ -69,15 +74,15 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.right_text:
                 if (!Constants.mControlUrl.equals(mControlET.getText().toString())){
-                    putFileToSD(mControlET.getText().toString(),"control");
+                    putFileToSD();
                     Constants.mControlUrl = mControlET.getText().toString();
                 }
                 if (!Constants.mMessageUrl.equals(mMessageET.getText().toString())){
-                    putFileToSD(mMessageET.getText().toString(),"message");
+                    putFileToSD();
                     Constants.mMessageUrl = mMessageET.getText().toString();
                 }
                 if (!Constants.mMeUrl.equals(mMeET.getText().toString())){
-                    putFileToSD(mMeET.getText().toString(),"me");
+                    putFileToSD();
                     Constants.mMeUrl = mMeET.getText().toString();
                 }
                 Toast.makeText(SettingActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
@@ -87,24 +92,30 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
-    public void putFileToSD(String message,String name)
+    public void putFileToSD()
     {
-        try
-        {
-            File file = new File(Constants.SysFilePhotoPathNeed + name + ".txt");
-            if (file.exists()){
-                file.delete();
-            }
-            FileOutputStream outStream = new FileOutputStream(Constants.SysFilePhotoPathNeed + name + ".txt",true);
-            OutputStreamWriter writer = new OutputStreamWriter(outStream,"UTF-8");
-            writer.write(message);
-            writer.flush();
-            writer.close();//记得关闭
-            outStream.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        LocalEntity entity = new LocalEntity();
+        entity.mControlUrl = mControlET.getText().toString();
+        entity.mMessageUrl = mMessageET.getText().toString();
+        entity.mMeUrl = mMeET.getText().toString();
+        mHelper.insert1(entity);
+
+//        try
+//        {
+//            File file = new File(Constants.SysFilePhotoPathNeed + name + ".txt");
+//            if (file.exists()){
+//                file.delete();
+//            }
+//            FileOutputStream outStream = new FileOutputStream(Constants.SysFilePhotoPathNeed + name + ".txt",true);
+//            OutputStreamWriter writer = new OutputStreamWriter(outStream,"UTF-8");
+//            writer.write(message);
+//            writer.flush();
+//            writer.close();//记得关闭
+//            outStream.close();
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
     }
 }
